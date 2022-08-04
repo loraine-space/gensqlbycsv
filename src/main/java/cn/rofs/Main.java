@@ -8,6 +8,6 @@ import cn.rofs.excel.GenSqlUtils;
  */
 public class Main {
     public static void main(String[] args) {
-        System.out.println(GenSqlUtils.defaultGenerate("data_1.csv").getMessage());
+        System.out.println("Hello world");
     }
 }
