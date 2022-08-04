@@ -1,9 +1,15 @@
 package cn.rofs.excel;
 
+import cn.rofs.excel.constant.SysConstant;
 import cn.rofs.excel.dto.ResultDTO;
 import cn.rofs.excel.enums.ModelTypeEnum;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import static cn.rofs.excel.constant.SysConstant.DEFAULT_DATA_DIR_PATH;
@@ -51,19 +57,25 @@ public class GenSqlUtils {
         File csvFile = new File(dataFullPath);
         if (!csvFile.exists()) return ResultDTO.FAIL("csv文件不存在");
         BufferedReader br = null;
+        StringBuffer resultSql = new StringBuffer();
+        Map<String, Object> headerMap = new HashMap<>();
         try {
             br = new BufferedReader(new FileReader(csvFile));
             String curLine;
             int lineCount = 0;
             while ((curLine = br.readLine()) != null) {
-                // TODO deal data
+                // TODO handle data
+                if (lineCount == 0) {
+                    headerMap = handleHeaderData(curLine, modelType);
+                }
+                resultSql.append(generateSql(curLine, headerMap, modelType));
             }
 
         } catch (IOException e) {
             e.printStackTrace();
             return ResultDTO.FAIL("读取csv文件出错");
         } finally {
-            if (br!=null) {
+            if (br != null) {
                 try {
                     br.close();
                 } catch (IOException e) {
@@ -85,5 +97,42 @@ public class GenSqlUtils {
         if (dataFileName == null || dataFileName.length() < 1) return false;
         String PATTERN_REGEX_CSV = "[a-zA-Z0-9_@-]+\\.(csv|CSV)$";
         return Pattern.matches(PATTERN_REGEX_CSV, dataFileName);
+    }
+
+    /**
+     * 处理首行数据
+     *
+     * @param curLine   行内容
+     * @param modelType 模版类型
+     * @return
+     */
+    private static Map<String, Object> handleHeaderData(String curLine, ModelTypeEnum modelType) {
+        Map<String, Object> resultMap = new HashMap<>();
+        if (ModelTypeEnum.DEFAULT.equals(modelType)) {
+            String[] arr = curLine.split(",");
+            for (String s : arr) {
+                resultMap.put(s.split("::")[0], s.split("::")[1]);
+            }
+        }
+        return resultMap;
+    }
+
+
+    /**
+     * 生成sql
+     *
+     * @param curLine
+     * @param headerMap
+     * @param modelType
+     * @return
+     */
+    private static StringBuffer generateSql(String curLine, Map<String, Object> headerMap, ModelTypeEnum modelType) {
+        if (ModelTypeEnum.DEFAULT.equals(modelType)) {
+            String tableName = String.valueOf(headerMap.get(SysConstant.MODEL_DEFAULT_TN));
+            String optType = String.valueOf(headerMap.get(SysConstant.MODEL_DEFAULT_OT));
+            Integer pkCounts = Integer.parseInt(headerMap.get(SysConstant.MODEL_DEFAULT_PKC).toString());
+
+        }
+        return null;
     }
 }
