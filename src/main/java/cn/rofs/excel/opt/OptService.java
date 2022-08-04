@@ -6,4 +6,6 @@ package cn.rofs.excel.opt;
  */
 public interface OptService {
     // TODO
+
+    StringBuffer genSql(String curLine);
 }

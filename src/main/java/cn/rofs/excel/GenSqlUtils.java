@@ -59,9 +59,6 @@ public class GenSqlUtils {
                 // TODO deal data
             }
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return ResultDTO.FAIL("读取csv文件出错");
         } catch (IOException e) {
             e.printStackTrace();
             return ResultDTO.FAIL("读取csv文件出错");
