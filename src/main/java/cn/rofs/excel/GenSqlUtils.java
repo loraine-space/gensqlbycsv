@@ -1,8 +1,9 @@
 package cn.rofs.excel;
 
-import cn.rofs.excel.constant.SysConstant;
 import cn.rofs.excel.dto.ResultDTO;
 import cn.rofs.excel.enums.ModelTypeEnum;
+import cn.rofs.excel.opt.OptService;
+import cn.rofs.excel.opt.OptServiceBuilder;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,8 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static cn.rofs.excel.constant.SysConstant.DEFAULT_DATA_DIR_PATH;
-import static cn.rofs.excel.constant.SysConstant.DEFAULT_RESULT_DIR_PATH;
+import static cn.rofs.excel.constant.SysConstant.*;
 
 /**
  * @author rainofsilence
@@ -68,7 +68,14 @@ public class GenSqlUtils {
                 if (lineCount == 0) {
                     headerMap = handleHeaderData(curLine, modelType);
                 }
-                resultSql.append(generateSql(curLine, headerMap, modelType));
+                switch (modelType) {
+                    case DEFAULT:
+                        OptService optService = OptServiceBuilder.getOptService(modelType + "-" + headerMap.get(KEY_OT).toString());
+                        resultSql.append(optService.genSql(curLine, headerMap));
+                        break;
+                    default:
+                        break;
+                }
             }
 
         } catch (IOException e) {
@@ -118,21 +125,4 @@ public class GenSqlUtils {
     }
 
 
-    /**
-     * 生成sql
-     *
-     * @param curLine
-     * @param headerMap
-     * @param modelType
-     * @return
-     */
-    private static StringBuffer generateSql(String curLine, Map<String, Object> headerMap, ModelTypeEnum modelType) {
-        if (ModelTypeEnum.DEFAULT.equals(modelType)) {
-            String tableName = String.valueOf(headerMap.get(SysConstant.MODEL_DEFAULT_TN));
-            String optType = String.valueOf(headerMap.get(SysConstant.MODEL_DEFAULT_OT));
-            Integer pkCounts = Integer.parseInt(headerMap.get(SysConstant.MODEL_DEFAULT_PKC).toString());
-
-        }
-        return null;
-    }
 }
