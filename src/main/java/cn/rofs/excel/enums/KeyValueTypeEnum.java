@@ -4,8 +4,7 @@ package cn.rofs.excel.enums;
  * @author rainofsilence
  * @date 2022/8/4 周四
  */
-public enum PrimaryKeyTypeEnum implements EnumAbility{
-    AUTO_INCREMENT("AI","主键自增"),
+public enum KeyValueTypeEnum implements EnumAbility{
     SNOWFLAKES("SN","雪花算法"),
     STRING("S","字符串"),
     NUMBER("N","数值");
@@ -14,7 +13,7 @@ public enum PrimaryKeyTypeEnum implements EnumAbility{
 
     private String desc;
 
-    PrimaryKeyTypeEnum(String code, String desc) {
+    KeyValueTypeEnum(String code, String desc) {
         this.code = code;
         this.desc = desc;
     }

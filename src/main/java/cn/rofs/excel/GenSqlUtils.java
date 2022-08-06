@@ -2,13 +2,10 @@ package cn.rofs.excel;
 
 import cn.rofs.excel.dto.ResultDTO;
 import cn.rofs.excel.enums.ModelTypeEnum;
-import cn.rofs.excel.opt.OptService;
-import cn.rofs.excel.opt.OptServiceBuilder;
+import cn.rofs.excel.sqlopt.OptService;
+import cn.rofs.excel.sqlopt.OptServiceBuilder;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -52,13 +49,15 @@ public class GenSqlUtils {
         }
         String[] dataFileName_ = dataFileName.split("[.]");
         String dataFullPath = dataDirPath + File.separator + dataFileName;
-        String resultFullPath = resultDirPath + File.separator + dataFileName_[0] + ".sql";
+        String resultFullPath = resultDirPath + File.separator + dataFileName_[0] + "_" + DateUtils.getCurDatetime() + ".sql";
 
         File csvFile = new File(dataFullPath);
         if (!csvFile.exists()) return ResultDTO.FAIL("csv文件不存在");
         BufferedReader br = null;
         StringBuffer resultSql = new StringBuffer();
         Map<String, Object> headerMap = new HashMap<>();
+        FileWriter fw = null;
+        resultSql.append("------START------" + dataFileName + "------START------\r\n");
         try {
             br = new BufferedReader(new FileReader(csvFile));
             String curLine;
@@ -67,6 +66,8 @@ public class GenSqlUtils {
                 // TODO handle data
                 if (lineCount == 0) {
                     headerMap = handleHeaderData(curLine, modelType);
+                    lineCount++;
+                    continue;
                 }
                 switch (modelType) {
                     case DEFAULT:
@@ -76,8 +77,12 @@ public class GenSqlUtils {
                     default:
                         break;
                 }
+                lineCount++;
             }
-
+            resultSql.append("------END------" + dataFileName + "------END------\r\n");
+            fw = new FileWriter(resultFullPath);
+            fw.write(resultSql.toString());
+            System.out.println("File: {" + resultFullPath + "} is generate success.");
         } catch (IOException e) {
             e.printStackTrace();
             return ResultDTO.FAIL("读取csv文件出错");
@@ -88,6 +93,13 @@ public class GenSqlUtils {
                 } catch (IOException e) {
                     e.printStackTrace();
                     return ResultDTO.FAIL("读取csv文件出错");
+                }
+            }
+            if (fw != null) {
+                try {
+                    fw.close();
+                } catch (IOException e) {
+                    throw new RuntimeException("读取csv文件出错");
                 }
             }
         }

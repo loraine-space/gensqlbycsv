@@ -2,8 +2,8 @@ package cn.rofs.excel;
 
 
 import cn.rofs.excel.enums.ModelTypeEnum;
-import cn.rofs.excel.opt.OptService;
-import cn.rofs.excel.opt.OptServiceBuilder;
+import cn.rofs.excel.sqlopt.OptService;
+import cn.rofs.excel.sqlopt.OptServiceBuilder;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -14,7 +14,7 @@ class GenSqlUtilsTest {
 
     @Test
     void defaultGenerate() {
-        GenSqlUtils.defaultGenerate("unExistData.csv");
+        GenSqlUtils.defaultGenerate("data.csv");
     }
 
     @Test
