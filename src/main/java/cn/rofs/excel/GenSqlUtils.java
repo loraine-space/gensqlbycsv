@@ -4,6 +4,8 @@ import cn.rofs.excel.dto.ResultDTO;
 import cn.rofs.excel.enums.ModelTypeEnum;
 import cn.rofs.excel.sqlopt.OptService;
 import cn.rofs.excel.sqlopt.OptServiceBuilder;
+import cn.rofs.excel.utils.DateUtils;
+import cn.rofs.excel.utils.FileUtils;
 
 import java.io.*;
 import java.util.HashMap;
@@ -44,6 +46,7 @@ public class GenSqlUtils {
      * @return
      */
     public static ResultDTO<Object> generate(String dataFileName, String dataDirPath, String resultDirPath, ModelTypeEnum modelType) {
+        ResultDTO<Object> resultDTO = ResultDTO.SUCCESS();
         if (!checkDataFileNameIsCSV(dataFileName)) {
             return ResultDTO.FAIL("dataFileName不符合规范");
         }
@@ -54,10 +57,10 @@ public class GenSqlUtils {
         File csvFile = new File(dataFullPath);
         if (!csvFile.exists()) return ResultDTO.FAIL("csv文件不存在");
         BufferedReader br = null;
-        StringBuffer resultSql = new StringBuffer();
+        StringBuilder resultSql = new StringBuilder();
         Map<String, Object> headerMap = new HashMap<>();
         FileWriter fw = null;
-        resultSql.append("------START------" + dataFileName + "------START------\r\n");
+        resultSql.append("------START------").append(dataFileName).append("------START------\r\n");
         try {
             br = new BufferedReader(new FileReader(csvFile));
             String curLine;
@@ -79,7 +82,9 @@ public class GenSqlUtils {
                 }
                 lineCount++;
             }
-            resultSql.append("------END------" + dataFileName + "------END------\r\n");
+            resultSql.append("------END------").append(dataFileName).append("------END------\r\n");
+            // 判断输出文件夹是否存在
+            FileUtils.mkdirs(resultDirPath);
             fw = new FileWriter(resultFullPath);
             fw.write(resultSql.toString());
             System.out.println("File: {" + resultFullPath + "} is generate success.");
@@ -92,18 +97,19 @@ public class GenSqlUtils {
                     br.close();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    return ResultDTO.FAIL("读取csv文件出错");
+                    resultDTO = ResultDTO.FAIL("读取csv文件出错");
                 }
             }
             if (fw != null) {
                 try {
                     fw.close();
                 } catch (IOException e) {
-                    throw new RuntimeException("读取csv文件出错");
+                    e.printStackTrace();
+                    resultDTO =  ResultDTO.FAIL("读取csv文件出错");
                 }
             }
         }
-        return ResultDTO.SUCCESS();
+        return resultDTO;
     }
 
     /**
