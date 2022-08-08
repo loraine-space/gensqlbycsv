@@ -21,9 +21,9 @@ public class DefaultInsertServiceImpl implements OptService {
 
         StringBuffer result = new StringBuffer();
 
-        StringBuffer insCol = new StringBuffer();
-        StringBuffer insVal = new StringBuffer();
-        StringBuffer delWhere = new StringBuffer();
+        StringBuilder insCol = new StringBuilder();
+        StringBuilder insVal = new StringBuilder();
+        StringBuilder delWhere = new StringBuilder();
 
         for (int i = 0; i < lineArr.length; i++) {
             String iLine = lineArr[i];
@@ -32,7 +32,7 @@ public class DefaultInsertServiceImpl implements OptService {
             String colValue = colArr[1];
             if (i <= primaryKeyCounts) {
                 if (delWhere.length() > 0) {
-                    delWhere.append(" and");
+                    delWhere.append(" and ");
                 }
                 delWhere.append(colName).append(" = ").append(colValue);
             }
@@ -47,7 +47,7 @@ public class DefaultInsertServiceImpl implements OptService {
             insVal.append(colValue);
         }
 
-        result.append("delete from ").append(tableName).append(" where").append(delWhere).append(";\r\n");
+        result.append("delete from ").append(tableName).append(" where ").append(delWhere).append(";\r\n");
         result.append("insert into ").append(tableName).append("(").append(insCol).append(") values (")
                 .append(insVal).append(");\r\n");
         return result;

@@ -14,7 +14,7 @@ class GenSqlUtilsTest {
 
     @Test
     void defaultGenerate() {
-        GenSqlUtils.defaultGenerate("data.csv");
+        GenSqlUtils.defaultGenerate("data-ins.csv");
     }
 
     @Test
