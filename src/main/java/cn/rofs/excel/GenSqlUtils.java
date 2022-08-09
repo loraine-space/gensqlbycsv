@@ -66,7 +66,6 @@ public class GenSqlUtils {
             String curLine;
             int lineCount = 0;
             while ((curLine = br.readLine()) != null) {
-                // TODO handle data
                 if (lineCount == 0) {
                     headerMap = handleHeaderData(curLine, modelType);
                     lineCount++;
