@@ -1,4 +1,4 @@
-# GenSqlByCSV
+# gensqlbycsv
 
 ![Version](https://img.shields.io/badge/Version-0.0.1-green)
 [![Java](https://img.shields.io/badge/Java-1.8%2B-green)](https://www.openlogic.com/openjdk-downloads)

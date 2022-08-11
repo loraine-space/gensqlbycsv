@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.rofs</groupId>
-    <artifactId>GenSqlByCSV</artifactId>
-    <version>1.0.0</version>
+    <artifactId>gensqlbycsv</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -21,5 +21,13 @@
             <version>1.26.147</version>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub maue-opensource Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/maue-opensource/gensqlbycsv</url>
+        </repository>
+    </distributionManagement>
 
 </project>
