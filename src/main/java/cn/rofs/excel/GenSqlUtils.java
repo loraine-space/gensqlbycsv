@@ -58,7 +58,10 @@ public class GenSqlUtils {
         String errorLogPath = LogUtils.genLogFilePathWithCsvName(dataFileName_[0]);
 
         File csvFile = new File(dataFullPath);
-        if (!csvFile.exists()) return ResultDTO.FAIL("csv文件不存在");
+        if (!csvFile.exists()) {
+            LogUtils.genErrorLog(errorLogPath,"csv文件不存在");
+            return ResultDTO.FAIL("csv文件不存在");
+        }
         BufferedReader br = null;
         StringBuilder resultSql = new StringBuilder();
         Map<String, Object> headerMap = new HashMap<>();
