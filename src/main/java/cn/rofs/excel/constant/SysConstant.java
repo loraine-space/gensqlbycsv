@@ -11,6 +11,8 @@ public class SysConstant {
     // SQL文件放置位置
     public static final String DEFAULT_RESULT_DIR_PATH = "src/main/resources/excel/result";
 
+    public static final String DEFAULT_LOG_DIR_PATH = "src/main/resources/excel/log";
+
     public static final String OPT_TYPE_INS = "ins";
     public static final String OPT_TYPE_UPD = "upd";
     public static final String OPT_TYPE_DEL = "del";

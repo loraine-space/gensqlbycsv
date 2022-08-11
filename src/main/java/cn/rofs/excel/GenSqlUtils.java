@@ -6,6 +6,7 @@ import cn.rofs.excel.sqlopt.OptService;
 import cn.rofs.excel.sqlopt.OptServiceBuilder;
 import cn.rofs.excel.utils.DateUtils;
 import cn.rofs.excel.utils.FileUtils;
+import cn.rofs.excel.utils.LogUtils;
 
 import java.io.*;
 import java.util.HashMap;
@@ -54,6 +55,8 @@ public class GenSqlUtils {
         String dataFullPath = dataDirPath + File.separator + dataFileName;
         String resultFullPath = resultDirPath + File.separator + dataFileName_[0] + "_" + DateUtils.getCurDatetime() + ".sql";
 
+        String errorLogPath = LogUtils.genLogFilePathWithCsvName(dataFileName_[0]);
+
         File csvFile = new File(dataFullPath);
         if (!csvFile.exists()) return ResultDTO.FAIL("csv文件不存在");
         BufferedReader br = null;
@@ -86,9 +89,10 @@ public class GenSqlUtils {
             FileUtils.mkdirs(resultDirPath);
             fw = new FileWriter(resultFullPath);
             fw.write(resultSql.toString());
-            System.out.println("File: {" + resultFullPath + "} is generate success.");
+            System.out.println("File: {" + resultFullPath + "} 创建成功.");
         } catch (IOException e) {
             e.printStackTrace();
+            LogUtils.genErrorLog(errorLogPath, e.getMessage());
             return ResultDTO.FAIL("读取csv文件出错");
         } finally {
             if (br != null) {

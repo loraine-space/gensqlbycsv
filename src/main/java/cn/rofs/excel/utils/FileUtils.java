@@ -27,4 +27,21 @@ public class FileUtils {
             e.printStackTrace();
         }
     }
+
+    public static void mkFile(String path) {
+        File f;
+        try {
+            f = new File(path);
+            if (!f.exists()) {
+                boolean b = f.createNewFile();
+                if (b) {
+                    System.out.println("文件: {"+path + "} 创建成功");
+                } else {
+                    System.out.println("文件: {"+path + "} 创建成功");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
