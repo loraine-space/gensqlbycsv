@@ -1,5 +1,6 @@
 package cn.rofs.excel.sqlopt.impl.moddefault;
 
+import cn.rofs.excel.dto.GenSqlResultDTO;
 import cn.rofs.excel.sqlopt.OptService;
 import cn.rofs.excel.utils.ColValueConvertUtils;
 
@@ -13,7 +14,7 @@ import static cn.rofs.excel.constant.SysConstant.KEY_TN;
  */
 public class DefaultDeleteServiceImpl implements OptService {
     @Override
-    public StringBuffer genSql(String curLine, Map<String, Object> headerMap) {
+    public GenSqlResultDTO genSql(String curLine, Map<String, Object> headerMap) {
         /*
          System.out.println("start deleteService");
          Integer primaryKeyCounts = Integer.valueOf(headerMap.getOrDefault(KEY_PKC, 0).toString());
@@ -37,6 +38,6 @@ public class DefaultDeleteServiceImpl implements OptService {
         }
 
         result.append("delete from ").append(tableName).append(" where ").append(resultWhere).append(";\r\n");
-        return result;
+        return GenSqlResultDTO.SUCCESS(result);
     }
 }

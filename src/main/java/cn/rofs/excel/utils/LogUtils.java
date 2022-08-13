@@ -30,24 +30,4 @@ public class LogUtils {
             }
         }
     }
-
-    public static String genLogFilePath() {
-        return genLogFilePathWithCsvName(null);
-    }
-
-    public static String genLogFilePathWithCsvName(String csvName) {
-        StringBuilder sbLogPath = new StringBuilder();
-        sbLogPath.append(SysConstant.DEFAULT_LOG_DIR_PATH).append(File.separator).append(DateUtils.getCurDate()).append(File.separator);
-        FileUtils.mkdirs(sbLogPath.toString());
-        StringBuilder sbLogName = new StringBuilder();
-        sbLogName.append("error_");
-        if (csvName != null && csvName.length() > 0) {
-            sbLogName.append(csvName).append("_");
-        }
-        sbLogName.append(DateUtils.getCurDatetime()).append(".log");
-        FileUtils.mkFile(sbLogPath.append(sbLogName).toString());
-        return sbLogPath.toString();
-    }
-
-
 }

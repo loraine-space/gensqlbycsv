@@ -1,19 +1,22 @@
 package cn.rofs.excel;
 
+import cn.rofs.excel.dto.CommonDataDTO;
+import cn.rofs.excel.dto.GenSqlResultDTO;
 import cn.rofs.excel.dto.ResultDTO;
 import cn.rofs.excel.enums.ModelTypeEnum;
 import cn.rofs.excel.sqlopt.OptService;
 import cn.rofs.excel.sqlopt.OptServiceBuilder;
 import cn.rofs.excel.utils.DateUtils;
 import cn.rofs.excel.utils.FileUtils;
-import cn.rofs.excel.utils.LogUtils;
+import cn.rofs.excel.utils.common.StringUtils;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static cn.rofs.excel.constant.SysConstant.*;
+import static cn.rofs.excel.constant.SysConstant.DEFAULT_FILE_DIR_PATH;
+import static cn.rofs.excel.constant.SysConstant.KEY_OT;
 
 /**
  * @author rainofsilence
@@ -36,31 +39,32 @@ public class GenSqlUtils {
      * @return
      */
     public static ResultDTO<Object> defaultGenerate(String dataFileName, ModelTypeEnum modelType) {
-        return generate(dataFileName, DEFAULT_DATA_DIR_PATH, DEFAULT_RESULT_DIR_PATH, modelType);
+        return generate(dataFileName, DEFAULT_FILE_DIR_PATH, modelType);
     }
 
     /**
-     * @param dataFileName  csv文件名称
-     * @param dataDirPath   csv文件夹路径(xx/...)
-     * @param resultDirPath sql文件夹路径(xx/...)
-     * @param modelType     模版类型
+     * 这种生成方式会自动根据`fileDirPath`找到对应的数据文件目录、生成结果文件目录、错误日志目录
+     *
+     * @param dataFileName csv文件名称(xx.csv)
+     * @param fileDirPath  文件路径
+     * @param modelType    模版类型
      * @return
      */
-    public static ResultDTO<Object> generate(String dataFileName, String dataDirPath, String resultDirPath, ModelTypeEnum modelType) {
+    public static ResultDTO<Object> generate(String dataFileName, String fileDirPath, ModelTypeEnum modelType) {
         ResultDTO<Object> resultDTO = ResultDTO.SUCCESS();
-        if (!checkDataFileNameIsCSV(dataFileName)) {
-            return ResultDTO.FAIL("dataFileName不符合规范");
+        if (StringUtils.isAnyEmpty(dataFileName, fileDirPath)) {
+            return ResultDTO.FAIL("There is a null value with `dataFileName` and `fileDirPath`.");
         }
-        String[] dataFileName_ = dataFileName.split("[.]");
-        String dataFullPath = dataDirPath + File.separator + dataFileName;
-        String resultFullPath = resultDirPath + File.separator + dataFileName_[0] + "_" + DateUtils.getCurDatetime() + ".sql";
+        if (!checkDataFileNameIsCSV(dataFileName)) {
+            return ResultDTO.FAIL("`dataFileName` is non-compliant.");
+        }
+        // 生成文件路径、名称等信息
+        CommonDataDTO commonData = new CommonDataDTO();
+        genCommonData(dataFileName, fileDirPath, commonData);
 
-        String errorLogPath = LogUtils.genLogFilePathWithCsvName(dataFileName_[0]);
-
-        File csvFile = new File(dataFullPath);
+        File csvFile = new File(commonData.getDataFileDirPath() + File.separator + dataFileName);
         if (!csvFile.exists()) {
-            LogUtils.genErrorLog(errorLogPath,"csv文件不存在");
-            return ResultDTO.FAIL("csv文件不存在");
+            return ResultDTO.FAIL("dataFile does not exist.");
         }
         BufferedReader br = null;
         StringBuilder resultSql = new StringBuilder();
@@ -80,7 +84,10 @@ public class GenSqlUtils {
                 switch (modelType) {
                     case DEFAULT:
                         OptService optService = OptServiceBuilder.getOptService(modelType + "-" + headerMap.get(KEY_OT).toString());
-                        resultSql.append(optService.genSql(curLine, headerMap));
+                        GenSqlResultDTO genSqlResult = optService.genSql(curLine, headerMap);
+                        if (StringUtils.isEmpty(genSqlResult.getErr())) {
+                            resultSql.append(genSqlResult.getSql());
+                        }
                         break;
                     default:
                         break;
@@ -89,21 +96,20 @@ public class GenSqlUtils {
             }
             resultSql.append("------END------").append(dataFileName).append("------END------\r\n");
             // 判断输出文件夹是否存在
-            FileUtils.mkdirs(resultDirPath);
-            fw = new FileWriter(resultFullPath);
+            FileUtils.mkdirs(commonData.getResultFileDirPath());
+            fw = new FileWriter(commonData.getResultFileDirPath() + File.separator + commonData.getResultFileName());
             fw.write(resultSql.toString());
-            System.out.println("File: {" + resultFullPath + "} 创建成功.");
+            System.out.println("File: {" + commonData.getResultFileDirPath() + File.separator + commonData.getResultFileName() + "} 创建成功.");
         } catch (IOException e) {
             e.printStackTrace();
-            LogUtils.genErrorLog(errorLogPath, e.getMessage());
-            return ResultDTO.FAIL("读取csv文件出错");
+            return ResultDTO.FAIL("Program exception: {" + e.getMessage() + "}");
         } finally {
             if (br != null) {
                 try {
                     br.close();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    resultDTO = ResultDTO.FAIL("读取csv文件出错");
+                    return ResultDTO.FAIL("Program exception: {" + e.getMessage() + "}");
                 }
             }
             if (fw != null) {
@@ -111,7 +117,7 @@ public class GenSqlUtils {
                     fw.close();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    resultDTO =  ResultDTO.FAIL("读取csv文件出错");
+                    return ResultDTO.FAIL("Program exception: {" + e.getMessage() + "}");
                 }
             }
         }
@@ -148,5 +154,17 @@ public class GenSqlUtils {
         return resultMap;
     }
 
+    private static void genCommonData(String dataFileName, String fileDirPath, CommonDataDTO target) {
+        target.setDataFileNameWithoutSuffix(dataFileName.split("[.]")[0]);
+        StringBuilder sbFileDirPath = new StringBuilder(fileDirPath);
+        if (!fileDirPath.endsWith(File.separator)) {
+            sbFileDirPath.append(File.separator);
+        }
+        target.setDataFileDirPath(sbFileDirPath + "data");
+        target.setResultFileDirPath(sbFileDirPath + "result");
+        target.setLogFileDirPath(sbFileDirPath + "log");
+        target.setLogFileName("log_" + DateUtils.getCurDatetime() + "_" + target.getDataFileNameWithoutSuffix() + ".log");
+        target.setResultFileName(target.getDataFileNameWithoutSuffix() + "_result_" + DateUtils.getCurDatetime() + ".sql");
+    }
 
 }
