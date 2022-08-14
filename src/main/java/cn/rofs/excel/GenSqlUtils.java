@@ -8,6 +8,7 @@ import cn.rofs.excel.sqlopt.OptService;
 import cn.rofs.excel.sqlopt.OptServiceBuilder;
 import cn.rofs.excel.utils.DateUtils;
 import cn.rofs.excel.utils.FileUtils;
+import cn.rofs.excel.utils.LogUtils;
 import cn.rofs.excel.utils.common.StringUtils;
 
 import java.io.*;
@@ -87,7 +88,9 @@ public class GenSqlUtils {
                         GenSqlResultDTO genSqlResult = optService.genSql(curLine, headerMap);
                         if (StringUtils.isEmpty(genSqlResult.getErr())) {
                             resultSql.append(genSqlResult.getSql());
+                            break;
                         }
+                        LogUtils.saveLog(commonData,genSqlResult.getErr());
                         break;
                     default:
                         break;

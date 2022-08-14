@@ -1,6 +1,7 @@
 package cn.rofs.excel.utils;
 
 import cn.rofs.excel.constant.SysConstant;
+import cn.rofs.excel.dto.CommonDataDTO;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,19 +14,21 @@ import java.io.IOException;
  */
 public class LogUtils {
 
-    public static void genErrorLog(String path, String errMsg) {
+    public static void saveLog(CommonDataDTO commonData, String errMsg) {
+        FileUtils.mkdirs(commonData.getLogFileDirPath());
+        FileUtils.mkFile(commonData.getLogFileDirPath() + File.separator + commonData.getLogFileName());
         BufferedWriter bw = null;
         try {
-            bw = new BufferedWriter(new FileWriter(path, true));
+            bw = new BufferedWriter(new FileWriter(commonData.getLogFileDirPath() + File.separator + commonData.getLogFileName(), true));
             bw.write(errMsg + "\r\n");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         } finally {
             if (bw != null) {
                 try {
                     bw.close();
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
             }
         }
