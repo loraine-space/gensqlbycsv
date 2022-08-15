@@ -28,7 +28,12 @@ public class DefaultInsertServiceImpl implements OptService {
 
         for (int i = 0; i < lineArr.length; i++) {
             String iLine = lineArr[i];
-            String[] colArr = ColValueConvertUtils.convertWithCol(iLine);
+            String[] colArr;
+            try {
+                colArr = ColValueConvertUtils.convertWithCol(iLine);
+            } catch (Exception e) {
+                return GenSqlResultDTO.FAIL(e.toString());
+            }
             String colName = colArr[0];
             String colValue = colArr[1];
             if (i <= primaryKeyCounts) {

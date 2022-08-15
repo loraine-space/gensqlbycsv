@@ -90,7 +90,7 @@ public class GenSqlUtils {
                             resultSql.append(genSqlResult.getSql());
                             break;
                         }
-                        LogUtils.saveLog(commonData,genSqlResult.getErr());
+                        LogUtils.saveLog(commonData, genSqlResult.getErr(),lineCount);
                         break;
                     default:
                         break;
