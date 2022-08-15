@@ -1,5 +1,6 @@
 package cn.rofs.excel.sqlopt.impl.moddefault;
 
+import cn.rofs.excel.dto.GenSqlResultDTO;
 import cn.rofs.excel.sqlopt.OptService;
 import cn.rofs.excel.utils.ColValueConvertUtils;
 
@@ -14,7 +15,7 @@ import static cn.rofs.excel.constant.SysConstant.KEY_TN;
  */
 public class DefaultUpdateServiceImpl implements OptService {
     @Override
-    public StringBuffer genSql(String curLine, Map<String, Object> headerMap) {
+    public GenSqlResultDTO genSql(String curLine, Map<String, Object> headerMap) {
         // System.out.println("start updateService");
         Integer primaryKeyCounts = Integer.valueOf(headerMap.getOrDefault(KEY_PKC, 0).toString());
         String tableName = headerMap.get(KEY_TN).toString();
@@ -43,6 +44,6 @@ public class DefaultUpdateServiceImpl implements OptService {
             updChange.append(colName).append(" = ").append(colValue);
         }
         result.append("update ").append(tableName).append(" set ").append(updChange).append(" where ").append(updWhere).append(";\r\n");
-        return result;
+        return GenSqlResultDTO.SUCCESS(result);
     }
 }

@@ -6,12 +6,8 @@ package cn.rofs.excel.constant;
  */
 public class SysConstant {
 
-    // CSV文件放置位置
-    public static final String DEFAULT_DATA_DIR_PATH = "src/main/resources/excel/data";
-    // SQL文件放置位置
-    public static final String DEFAULT_RESULT_DIR_PATH = "src/main/resources/excel/result";
-
-    public static final String DEFAULT_LOG_DIR_PATH = "src/main/resources/excel/log";
+    // 默认文件根目录
+    public static final String DEFAULT_FILE_DIR_PATH = "src/test/resources/excel";
 
     public static final String OPT_TYPE_INS = "ins";
     public static final String OPT_TYPE_UPD = "upd";

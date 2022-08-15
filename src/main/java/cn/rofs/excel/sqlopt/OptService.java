@@ -1,5 +1,7 @@
 package cn.rofs.excel.sqlopt;
 
+import cn.rofs.excel.dto.GenSqlResultDTO;
+
 import java.util.Map;
 
 /**
@@ -8,5 +10,5 @@ import java.util.Map;
  */
 public interface OptService {
 
-    StringBuffer genSql(String curLine, Map<String,Object> headerMap);
+    GenSqlResultDTO genSql(String curLine, Map<String,Object> headerMap);
 }

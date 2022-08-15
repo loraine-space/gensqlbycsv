@@ -1,5 +1,6 @@
 package cn.rofs.excel.sqlopt.impl.moddefault;
 
+import cn.rofs.excel.dto.GenSqlResultDTO;
 import cn.rofs.excel.utils.ColValueConvertUtils;
 import cn.rofs.excel.sqlopt.OptService;
 
@@ -13,7 +14,7 @@ import static cn.rofs.excel.constant.SysConstant.*;
  */
 public class DefaultInsertServiceImpl implements OptService {
     @Override
-    public StringBuffer genSql(String curLine, Map<String, Object> headerMap) {
+    public GenSqlResultDTO genSql(String curLine, Map<String, Object> headerMap) {
         // System.out.println("start insertService");
         Integer primaryKeyCounts = Integer.valueOf(headerMap.getOrDefault(KEY_PKC, 0).toString());
         String tableName = headerMap.get(KEY_TN).toString();
@@ -27,7 +28,12 @@ public class DefaultInsertServiceImpl implements OptService {
 
         for (int i = 0; i < lineArr.length; i++) {
             String iLine = lineArr[i];
-            String[] colArr = ColValueConvertUtils.convertWithCol(iLine);
+            String[] colArr;
+            try {
+                colArr = ColValueConvertUtils.convertWithCol(iLine);
+            } catch (Exception e) {
+                return GenSqlResultDTO.FAIL(e.toString());
+            }
             String colName = colArr[0];
             String colValue = colArr[1];
             if (i <= primaryKeyCounts) {
@@ -50,6 +56,6 @@ public class DefaultInsertServiceImpl implements OptService {
         result.append("delete from ").append(tableName).append(" where ").append(delWhere).append(";\r\n");
         result.append("insert into ").append(tableName).append("(").append(insCol).append(") values (")
                 .append(insVal).append(");\r\n");
-        return result;
+        return GenSqlResultDTO.SUCCESS(result);
     }
 }

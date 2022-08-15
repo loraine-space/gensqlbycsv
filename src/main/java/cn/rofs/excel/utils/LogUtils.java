@@ -1,6 +1,7 @@
 package cn.rofs.excel.utils;
 
 import cn.rofs.excel.constant.SysConstant;
+import cn.rofs.excel.dto.CommonDataDTO;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,41 +14,23 @@ import java.io.IOException;
  */
 public class LogUtils {
 
-    public static void genErrorLog(String path, String errMsg) {
+    public static void saveLog(CommonDataDTO commonData, String errMsg, Integer lineCount) {
+        FileUtils.mkdirs(commonData.getLogFileDirPath());
+        FileUtils.mkFile(commonData.getLogFileDirPath() + File.separator + commonData.getLogFileName());
         BufferedWriter bw = null;
         try {
-            bw = new BufferedWriter(new FileWriter(path, true));
-            bw.write(errMsg + "\r\n");
+            bw = new BufferedWriter(new FileWriter(commonData.getLogFileDirPath() + File.separator + commonData.getLogFileName(), true));
+            bw.write("csvLineCount: " + (lineCount + 1) + ", exception: {" + errMsg + "}\r\n");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         } finally {
             if (bw != null) {
                 try {
                     bw.close();
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
             }
         }
     }
-
-    public static String genLogFilePath() {
-        return genLogFilePathWithCsvName(null);
-    }
-
-    public static String genLogFilePathWithCsvName(String csvName) {
-        StringBuilder sbLogPath = new StringBuilder();
-        sbLogPath.append(SysConstant.DEFAULT_LOG_DIR_PATH).append(File.separator).append(DateUtils.getCurDate()).append(File.separator);
-        FileUtils.mkdirs(sbLogPath.toString());
-        StringBuilder sbLogName = new StringBuilder();
-        sbLogName.append("error_");
-        if (csvName != null && csvName.length() > 0) {
-            sbLogName.append(csvName).append("_");
-        }
-        sbLogName.append(DateUtils.getCurDatetime()).append(".log");
-        FileUtils.mkFile(sbLogPath.append(sbLogName).toString());
-        return sbLogPath.toString();
-    }
-
-
 }

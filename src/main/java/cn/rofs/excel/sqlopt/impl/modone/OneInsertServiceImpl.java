@@ -1,5 +1,6 @@
 package cn.rofs.excel.sqlopt.impl.modone;
 
+import cn.rofs.excel.dto.GenSqlResultDTO;
 import cn.rofs.excel.sqlopt.OptService;
 
 import java.util.Map;
@@ -10,7 +11,7 @@ import java.util.Map;
  */
 public class OneInsertServiceImpl implements OptService {
     @Override
-    public StringBuffer genSql(String curLine, Map<String, Object> headerMap) {
+    public GenSqlResultDTO genSql(String curLine, Map<String, Object> headerMap) {
         System.out.println("start insertService");
         return null;
     }
