@@ -28,7 +28,12 @@ public class DefaultDeleteServiceImpl implements OptService {
 
         for (int i = 0; i < lineArr.length; i++) {
             String iLine = lineArr[i];
-            String[] colArr = ColValueConvertUtils.convertWithCol(iLine);
+            String[] colArr;
+            try {
+                colArr = ColValueConvertUtils.convertWithCol(iLine);
+            } catch (Exception e) {
+                return GenSqlResultDTO.FAIL(e.toString());
+            }
             String colName = colArr[0];
             String coValue = colArr[1];
             if (resultWhere.length() > 0) {
