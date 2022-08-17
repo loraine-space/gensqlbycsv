@@ -18,13 +18,15 @@ public class ColValueConvertUtils {
         String[] iLineArr = iLine.split(SEPARATOR_TV);
         String type = iLineArr[0];
         String name = iLineArr[1];
+        if (KeyValueTypeEnum.SNOWFLAKES.codeEquals(type)) {
+            SnowFlakeIdBuilder idBuilder = new SnowFlakeIdBuilder(1,1,1);
+            return new String[]{name, "'" + idBuilder.nextId() + "'"};
+        }
         String value = iLineArr[2];
         if (KeyValueTypeEnum.NUMBER.codeEquals(type)) {
             return new String[]{name, value};
         } else if (KeyValueTypeEnum.STRING.codeEquals(type)) {
             return new String[]{name, "'" + value + "'"};
-        } else if (KeyValueTypeEnum.SNOWFLAKES.codeEquals(type)) {
-            return new String[]{"", ""};
         }
         return new String[]{"", ""};
     }
