@@ -19,8 +19,7 @@ public class ColValueConvertUtils {
         String type = iLineArr[0];
         String name = iLineArr[1];
         if (KeyValueTypeEnum.SNOWFLAKES.codeEquals(type)) {
-            SnowFlakeIdBuilder idBuilder = new SnowFlakeIdBuilder(1,1,1);
-            return new String[]{name, "'" + idBuilder.nextId() + "'"};
+            return new String[]{name, "'" + GenIdUtils.genSnowFlakeId() + "'"};
         }
         String value = iLineArr[2];
         if (KeyValueTypeEnum.NUMBER.codeEquals(type)) {
