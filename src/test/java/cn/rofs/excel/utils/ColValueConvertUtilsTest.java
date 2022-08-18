@@ -14,4 +14,9 @@ class ColValueConvertUtilsTest {
     void convertWithCol() {
         ColValueConvertUtils.convertWithCol(null);
     }
+
+    @Test
+    void convert() {
+        System.out.println(ColValueConvertUtils.convert("SN::ID"));
+    }
 }
