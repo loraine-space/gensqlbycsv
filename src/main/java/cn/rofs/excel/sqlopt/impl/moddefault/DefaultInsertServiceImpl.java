@@ -1,12 +1,14 @@
 package cn.rofs.excel.sqlopt.impl.moddefault;
 
 import cn.rofs.excel.dto.GenSqlResultDTO;
-import cn.rofs.excel.utils.ColValueConvertUtils;
 import cn.rofs.excel.sqlopt.OptService;
+import cn.rofs.excel.utils.ColValueConvertUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-import static cn.rofs.excel.constant.SysConstant.*;
+import static cn.rofs.excel.constant.SysConstant.KEY_PKC;
+import static cn.rofs.excel.constant.SysConstant.KEY_TN;
 
 /**
  * @author rainofsilence
@@ -14,7 +16,7 @@ import static cn.rofs.excel.constant.SysConstant.*;
  */
 public class DefaultInsertServiceImpl implements OptService {
     @Override
-    public GenSqlResultDTO genSql(String curLine, Map<String, Object> headerMap) {
+    public GenSqlResultDTO genSql(@NotNull String curLine, @NotNull Map<String, Object> headerMap) {
         // System.out.println("start insertService");
         Integer primaryKeyCounts = Integer.valueOf(headerMap.getOrDefault(KEY_PKC, 0).toString());
         String tableName = headerMap.get(KEY_TN).toString();
@@ -52,8 +54,9 @@ public class DefaultInsertServiceImpl implements OptService {
             }
             insVal.append(colValue);
         }
-
-        result.append("delete from ").append(tableName).append(" where ").append(delWhere).append(";\r\n");
+        if (primaryKeyCounts > 0) {
+            result.append("delete from ").append(tableName).append(" where ").append(delWhere).append(";\r\n");
+        }
         result.append("insert into ").append(tableName).append("(").append(insCol).append(") values (")
                 .append(insVal).append(");\r\n");
         return GenSqlResultDTO.SUCCESS(result);

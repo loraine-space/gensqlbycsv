@@ -10,6 +10,7 @@ import cn.rofs.excel.utils.DateUtils;
 import cn.rofs.excel.utils.FileUtils;
 import cn.rofs.excel.utils.LogUtils;
 import cn.rofs.excel.utils.common.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.util.HashMap;
@@ -146,7 +147,7 @@ public class GenSqlUtils {
      * @param modelType 模版类型
      * @return
      */
-    private static Map<String, Object> handleHeaderData(String curLine, ModelTypeEnum modelType) {
+    private static @NotNull Map<String, Object> handleHeaderData(String curLine, ModelTypeEnum modelType) {
         Map<String, Object> resultMap = new HashMap<>();
         if (ModelTypeEnum.DEFAULT.equals(modelType)) {
             String[] arr = curLine.split(",");
@@ -157,7 +158,7 @@ public class GenSqlUtils {
         return resultMap;
     }
 
-    private static void genCommonData(String dataFileName, String fileDirPath, CommonDataDTO target) {
+    private static void genCommonData(@NotNull String dataFileName, String fileDirPath, @NotNull CommonDataDTO target) {
         target.setDataFileNameWithoutSuffix(dataFileName.split("[.]")[0]);
         StringBuilder sbFileDirPath = new StringBuilder(fileDirPath);
         if (!fileDirPath.endsWith(File.separator)) {

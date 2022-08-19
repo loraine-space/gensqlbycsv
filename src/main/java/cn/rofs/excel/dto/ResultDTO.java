@@ -1,5 +1,8 @@
 package cn.rofs.excel.dto;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author rainofsilence
  * @date 2022/8/3 周三
@@ -18,11 +21,13 @@ public class ResultDTO<T> {
         this.data = data;
     }
 
-    public static <E> ResultDTO<E> SUCCESS() {
+    @Contract(value = " -> new", pure = true)
+    public static <E> @NotNull ResultDTO<E> SUCCESS() {
         return new ResultDTO<>(200, "SUCCESS", null);
     }
 
-    public static <E> ResultDTO<E> FAIL(String message) {
+    @Contract(value = "_ -> new", pure = true)
+    public static <E> @NotNull ResultDTO<E> FAIL(String message) {
         return new ResultDTO<>(500, message, null);
     }
 

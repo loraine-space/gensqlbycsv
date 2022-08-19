@@ -1,6 +1,8 @@
 package cn.rofs.excel.utils;
 
 import cn.rofs.excel.enums.KeyValueTypeEnum;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import static cn.rofs.excel.constant.SysConstant.SEPARATOR_TV;
 
@@ -14,7 +16,8 @@ public class ColValueConvertUtils {
         return convertWithCol(iLine)[1];
     }
 
-    public static String[] convertWithCol(String iLine) {
+    @Contract("_ -> new")
+    public static String @NotNull [] convertWithCol(@NotNull String iLine) {
         String[] iLineArr = iLine.split(SEPARATOR_TV);
         String type = iLineArr[0];
         String name = iLineArr[1];

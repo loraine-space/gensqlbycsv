@@ -2,6 +2,7 @@ package cn.rofs.excel.utils;
 
 import cn.rofs.excel.constant.SysConstant;
 import cn.rofs.excel.dto.CommonDataDTO;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,7 +15,7 @@ import java.io.IOException;
  */
 public class LogUtils {
 
-    public static void saveLog(CommonDataDTO commonData, String errMsg, Integer lineCount) {
+    public static void saveLog(@NotNull CommonDataDTO commonData, String errMsg, Integer lineCount) {
         FileUtils.mkdirs(commonData.getLogFileDirPath());
         FileUtils.mkFile(commonData.getLogFileDirPath() + File.separator + commonData.getLogFileName());
         BufferedWriter bw = null;

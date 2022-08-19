@@ -1,5 +1,7 @@
 package cn.rofs.excel.utils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -9,12 +11,12 @@ import java.util.Date;
  */
 public class DateUtils {
 
-    public static String getCurDatetime() {
+    public static @NotNull String getCurDatetime() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         return sdf.format(new Date());
     }
 
-    public static String getCurDate() {
+    public static @NotNull String getCurDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         return sdf.format(new Date());
     }
