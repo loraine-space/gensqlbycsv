@@ -3,6 +3,7 @@ package cn.rofs.excel.sqlopt.impl.moddefault;
 import cn.rofs.excel.dto.GenSqlResultDTO;
 import cn.rofs.excel.sqlopt.OptService;
 import cn.rofs.excel.utils.ColValueConvertUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import static cn.rofs.excel.constant.SysConstant.KEY_TN;
  */
 public class DefaultDeleteServiceImpl implements OptService {
     @Override
-    public GenSqlResultDTO genSql(String curLine, Map<String, Object> headerMap) {
+    public GenSqlResultDTO genSql(@NotNull String curLine, @NotNull Map<String, Object> headerMap) {
         /*
          System.out.println("start deleteService");
          Integer primaryKeyCounts = Integer.valueOf(headerMap.getOrDefault(KEY_PKC, 0).toString());
@@ -28,7 +29,12 @@ public class DefaultDeleteServiceImpl implements OptService {
 
         for (int i = 0; i < lineArr.length; i++) {
             String iLine = lineArr[i];
-            String[] colArr = ColValueConvertUtils.convertWithCol(iLine);
+            String[] colArr;
+            try {
+                colArr = ColValueConvertUtils.convertWithCol(iLine);
+            } catch (Exception e) {
+                return GenSqlResultDTO.FAIL(e.toString());
+            }
             String colName = colArr[0];
             String coValue = colArr[1];
             if (resultWhere.length() > 0) {

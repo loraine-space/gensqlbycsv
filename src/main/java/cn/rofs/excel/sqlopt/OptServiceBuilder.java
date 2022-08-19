@@ -6,6 +6,7 @@ import cn.rofs.excel.sqlopt.impl.moddefault.DefaultUpdateServiceImpl;
 import cn.rofs.excel.sqlopt.impl.modone.OneDeleteServiceImpl;
 import cn.rofs.excel.sqlopt.impl.modone.OneInsertServiceImpl;
 import cn.rofs.excel.sqlopt.impl.modone.OneUpdateServiceImpl;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,7 +38,7 @@ public class OptServiceBuilder {
      * @param optType
      * @return
      */
-    public static OptService getOptService(String optType) {
+    public static @NotNull OptService getOptService(@NotNull String optType) {
         OptService optService = optServicePool.get(optType.toUpperCase());
         if (optService == null) {
             throw new RuntimeException("The optType was not found");

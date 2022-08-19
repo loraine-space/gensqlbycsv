@@ -1,5 +1,7 @@
 package cn.rofs.excel.utils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 
 /**
@@ -8,7 +10,7 @@ import java.io.File;
  */
 public class FileUtils {
 
-    public static void mkdirs(String path) {
+    public static void mkdirs(@NotNull String path) {
         if (!path.endsWith("/")) {
             path = path + "/";
         }
