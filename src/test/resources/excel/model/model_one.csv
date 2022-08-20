@@ -1,0 +1,4 @@
+table_name::user_info,opt_type::ins,primarykey_counts::1,S::id::N20220804001,S::name::Maue,N::age::17
+table_name::user_info,opt_type::upd,primarykey_counts::1,S::id::N20220804001,S::name::Maue,N::age::17
+table_name::user_info,opt_type::del,primarykey_counts::1,S::id::N20220804001
+table_name::user_role,opt_type::ins,primarykey_counts::2,S::user_id::N20220804001,S::role_id::N20220804001,S::name::Maue,N::age::17

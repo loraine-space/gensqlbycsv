@@ -19,6 +19,8 @@ import java.util.regex.Pattern;
 
 import static cn.rofs.excel.constant.SysConstant.DEFAULT_FILE_DIR_PATH;
 import static cn.rofs.excel.constant.SysConstant.KEY_OT;
+import static cn.rofs.excel.enums.ModelTypeEnum.DEFAULT;
+import static cn.rofs.excel.enums.ModelTypeEnum.ONE;
 
 /**
  * @author rainofsilence
@@ -32,7 +34,7 @@ public class GenSqlUtils {
      * @return
      */
     public static ResultDTO<Object> defaultGenerate(String dataFileName) {
-        return defaultGenerate(dataFileName, ModelTypeEnum.DEFAULT);
+        return defaultGenerate(dataFileName, DEFAULT);
     }
 
     /**
@@ -78,24 +80,24 @@ public class GenSqlUtils {
             String curLine;
             int lineCount = 0;
             while ((curLine = br.readLine()) != null) {
-                if (lineCount == 0) {
+                if (DEFAULT.equals(modelType) && lineCount == 0) {
                     headerMap = handleHeaderData(curLine, modelType);
                     lineCount++;
                     continue;
                 }
-                switch (modelType) {
-                    case DEFAULT:
-                        OptService optService = OptServiceBuilder.getOptService(modelType + "-" + headerMap.get(KEY_OT).toString());
-                        GenSqlResultDTO genSqlResult = optService.genSql(curLine, headerMap);
-                        if (StringUtils.isEmpty(genSqlResult.getErr())) {
-                            resultSql.append(genSqlResult.getSql());
-                            break;
-                        }
-                        LogUtils.saveLog(commonData, genSqlResult.getErr(),lineCount);
-                        break;
-                    default:
-                        break;
+
+                if (ONE.equals(modelType)) {
+                    headerMap = handleHeaderData(curLine, modelType);
                 }
+
+                OptService optService = OptServiceBuilder.getOptService(modelType + "-" + headerMap.get(KEY_OT).toString());
+                GenSqlResultDTO genSqlResult = optService.genSql(curLine, headerMap);
+                if (StringUtils.isEmpty(genSqlResult.getErr())) {
+                    resultSql.append(genSqlResult.getSql());
+                    lineCount++;
+                    continue;
+                }
+                LogUtils.saveLog(commonData, genSqlResult.getErr(), lineCount);
                 lineCount++;
             }
             resultSql.append("------END------").append(dataFileName).append("------END------\r\n");
@@ -149,9 +151,15 @@ public class GenSqlUtils {
      */
     private static @NotNull Map<String, Object> handleHeaderData(String curLine, ModelTypeEnum modelType) {
         Map<String, Object> resultMap = new HashMap<>();
-        if (ModelTypeEnum.DEFAULT.equals(modelType)) {
+        if (DEFAULT.equals(modelType)) {
             String[] arr = curLine.split(",");
             for (String s : arr) {
+                resultMap.put(s.split("::")[0], s.split("::")[1]);
+            }
+        } else if (ONE.equals(modelType)) {
+            String[] arr = curLine.split(",");
+            for (int i = 0; i < 3; i++) {
+                String s = arr[i];
                 resultMap.put(s.split("::")[0], s.split("::")[1]);
             }
         }
