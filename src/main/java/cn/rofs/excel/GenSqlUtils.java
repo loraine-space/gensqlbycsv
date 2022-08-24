@@ -34,27 +34,27 @@ public class GenSqlUtils {
      * @return
      */
     public static ResultDTO<Object> defaultGenerate(String dataFileName) {
-        return defaultGenerate(dataFileName, DEFAULT);
+        return defaultGenerate(DEFAULT, dataFileName);
     }
 
     /**
-     * @param dataFileName 文件名称(xx.csv)
      * @param modelType    模版类型
+     * @param dataFileName 文件名称(xx.csv)
      * @return
      */
-    public static ResultDTO<Object> defaultGenerate(String dataFileName, ModelTypeEnum modelType) {
-        return generate(dataFileName, DEFAULT_FILE_DIR_PATH, modelType);
+    public static ResultDTO<Object> defaultGenerate(ModelTypeEnum modelType, String dataFileName) {
+        return generate(modelType, DEFAULT_FILE_DIR_PATH, dataFileName);
     }
 
     /**
      * 这种生成方式会自动根据`fileDirPath`找到对应的数据文件目录、生成结果文件目录、错误日志目录
      *
-     * @param dataFileName csv文件名称(xx.csv)
-     * @param fileDirPath  文件路径
      * @param modelType    模版类型
+     * @param fileDirPath  文件路径
+     * @param dataFileName csv文件名称(xx.csv)
      * @return
      */
-    public static ResultDTO<Object> generate(String dataFileName, String fileDirPath, ModelTypeEnum modelType) {
+    public static ResultDTO<Object> generate(ModelTypeEnum modelType, String fileDirPath, String dataFileName) {
         ResultDTO<Object> resultDTO = ResultDTO.SUCCESS();
         if (StringUtils.isAnyEmpty(dataFileName, fileDirPath)) {
             return ResultDTO.FAIL("There is a null value with `dataFileName` and `fileDirPath`.");
@@ -128,6 +128,18 @@ public class GenSqlUtils {
             }
         }
         return resultDTO;
+    }
+
+    /**
+     * TODO: new  支持多excel文件生成sql到一个文件中
+     *
+     * @param modelType     模版类型
+     * @param fileDirPath   文件路径
+     * @param dataFileNames csv文件名称...(xx.csv)
+     * @return
+     */
+    public static ResultDTO<Object> generate(ModelTypeEnum modelType, String fileDirPath, CharSequence... dataFileNames) {
+        return ResultDTO.SUCCESS();
     }
 
     /**
