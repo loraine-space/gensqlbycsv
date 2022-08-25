@@ -47,6 +47,16 @@ public class GenSqlUtils {
     }
 
     /**
+     *
+     * @param modelType 模版类型
+     * @param dataFileNames 文件名称...(xx.csv)
+     * @return
+     */
+    public static ResultDTO<Object> defaultGenerate(ModelTypeEnum modelType, CharSequence... dataFileNames) {
+        return generate(modelType, DEFAULT_FILE_DIR_PATH, dataFileNames);
+    }
+
+    /**
      * 这种生成方式会自动根据`fileDirPath`找到对应的数据文件目录、生成结果文件目录、错误日志目录
      *
      * @param modelType    模版类型
