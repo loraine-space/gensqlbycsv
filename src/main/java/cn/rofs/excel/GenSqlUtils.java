@@ -2,7 +2,7 @@ package cn.rofs.excel;
 
 import cn.rofs.excel.dto.CommonDataDTO;
 import cn.rofs.excel.dto.GenSqlResultDTO;
-import cn.rofs.excel.dto.ResultDTO;
+import cn.rofs.excel.dto.ResultDataDTO;
 import cn.rofs.excel.enums.ModelTypeEnum;
 import cn.rofs.excel.sqlopt.OptService;
 import cn.rofs.excel.sqlopt.OptServiceBuilder;
@@ -33,7 +33,7 @@ public class GenSqlUtils {
      * @param dataFileName 文件名称(xx.csv)
      * @return
      */
-    public static ResultDTO<Object> defaultGenerate(String dataFileName) {
+    public static ResultDataDTO<Object> defaultGenerate(String dataFileName) {
         return defaultGenerate(DEFAULT, dataFileName);
     }
 
@@ -42,7 +42,7 @@ public class GenSqlUtils {
      * @param dataFileName 文件名称(xx.csv)
      * @return
      */
-    public static ResultDTO<Object> defaultGenerate(ModelTypeEnum modelType, String dataFileName) {
+    public static ResultDataDTO<Object> defaultGenerate(ModelTypeEnum modelType, String dataFileName) {
         return generate(modelType, DEFAULT_FILE_DIR_PATH, dataFileName);
     }
 
@@ -52,7 +52,7 @@ public class GenSqlUtils {
      * @param dataFileNames 文件名称...(xx.csv)
      * @return
      */
-    public static ResultDTO<Object> defaultGenerate(ModelTypeEnum modelType, CharSequence... dataFileNames) {
+    public static ResultDataDTO<Object> defaultGenerate(ModelTypeEnum modelType, CharSequence... dataFileNames) {
         return generate(modelType, DEFAULT_FILE_DIR_PATH, dataFileNames);
     }
 
@@ -64,13 +64,13 @@ public class GenSqlUtils {
      * @param dataFileName csv文件名称(xx.csv)
      * @return
      */
-    public static ResultDTO<Object> generate(ModelTypeEnum modelType, String fileDirPath, String dataFileName) {
-        ResultDTO<Object> resultDTO = ResultDTO.SUCCESS();
+    public static ResultDataDTO<Object> generate(ModelTypeEnum modelType, String fileDirPath, String dataFileName) {
+        ResultDataDTO<Object> resultDataDTO = ResultDataDTO.SUCCESS();
         if (StringUtils.isAnyEmpty(dataFileName, fileDirPath)) {
-            return ResultDTO.FAIL("There is a null value with `dataFileName` and `fileDirPath`.");
+            return ResultDataDTO.FAIL("There is a null value with `dataFileName` and `fileDirPath`.");
         }
         if (!checkDataFileNameIsCSV(dataFileName)) {
-            return ResultDTO.FAIL("`dataFileName` is non-compliant.");
+            return ResultDataDTO.FAIL("`dataFileName` is non-compliant.");
         }
         // 生成文件路径、名称等信息
         CommonDataDTO commonData = new CommonDataDTO();
@@ -78,7 +78,7 @@ public class GenSqlUtils {
 
         File csvFile = new File(commonData.getDataFileDirPath() + File.separator + dataFileName);
         if (!csvFile.exists()) {
-            return ResultDTO.FAIL("dataFile does not exist.");
+            return ResultDataDTO.FAIL("dataFile does not exist.");
         }
         BufferedReader br = null;
         StringBuilder resultSql = new StringBuilder();
@@ -118,14 +118,14 @@ public class GenSqlUtils {
             System.out.println("File: {" + commonData.getResultFileDirPath() + File.separator + commonData.getResultFileName() + "} 创建成功.");
         } catch (IOException e) {
             e.printStackTrace();
-            return ResultDTO.FAIL("Program exception: {" + e.getMessage() + "}");
+            return ResultDataDTO.FAIL("Program exception: {" + e.getMessage() + "}");
         } finally {
             if (br != null) {
                 try {
                     br.close();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    return ResultDTO.FAIL("Program exception: {" + e.getMessage() + "}");
+                    return ResultDataDTO.FAIL("Program exception: {" + e.getMessage() + "}");
                 }
             }
             if (fw != null) {
@@ -133,23 +133,36 @@ public class GenSqlUtils {
                     fw.close();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    return ResultDTO.FAIL("Program exception: {" + e.getMessage() + "}");
+                    return ResultDataDTO.FAIL("Program exception: {" + e.getMessage() + "}");
                 }
             }
         }
-        return resultDTO;
+        return resultDataDTO;
     }
 
     /**
-     * TODO: new  支持多excel文件生成sql到一个文件中
+     * TODO: new feature 支持多excel文件生成sql到一个文件中
+     * PS: 该功能优先级不高 也可以考虑不做
      *
      * @param modelType     模版类型
      * @param fileDirPath   文件路径
      * @param dataFileNames csv文件名称...(xx.csv)
      * @return
      */
-    public static ResultDTO<Object> generate(ModelTypeEnum modelType, String fileDirPath, CharSequence... dataFileNames) {
-        return ResultDTO.SUCCESS();
+    public static ResultDataDTO<Object> generate(ModelTypeEnum modelType, String fileDirPath, CharSequence... dataFileNames) {
+        return ResultDataDTO.SUCCESS();
+    }
+
+
+    /**
+     * TODO: new feature 支持根据SqlTemplate生成sql
+     * @param sqlTemplate sql模版
+     * @param fileDirPath 文件目录
+     * @param dataFileName 文件名称
+     * @return
+     */
+    public static ResultDataDTO<Object> generateBySqlTemplate(String sqlTemplate, String fileDirPath, String dataFileName) {
+        return ResultDataDTO.SUCCESS();
     }
 
     /**

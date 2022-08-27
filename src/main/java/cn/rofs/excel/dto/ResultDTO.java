@@ -1,34 +1,31 @@
 package cn.rofs.excel.dto;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-
 /**
  * @author rainofsilence
- * @date 2022/8/3 周三
+ * @date 2022/8/27 周六
  */
-public class ResultDTO<T> {
+public class ResultDTO {
 
     private Integer code;
 
     private String message;
 
-    private T data;
 
-    public ResultDTO(Integer code, String message, T data) {
+    public ResultDTO() {
+    }
+
+    public ResultDTO(Integer code, String message) {
         this.code = code;
         this.message = message;
-        this.data = data;
     }
 
-    @Contract(value = " -> new", pure = true)
-    public static <E> @NotNull ResultDTO<E> SUCCESS() {
-        return new ResultDTO<>(200, "SUCCESS", null);
+
+    public static ResultDTO SUCCESS() {
+        return new ResultDTO(200, "SUCCESS");
     }
 
-    @Contract(value = "_ -> new", pure = true)
-    public static <E> @NotNull ResultDTO<E> FAIL(String message) {
-        return new ResultDTO<>(500, message, null);
+    public static ResultDTO FAIL(String message) {
+        return new ResultDTO(500, message);
     }
 
     public Integer getCode() {
@@ -45,13 +42,5 @@ public class ResultDTO<T> {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
     }
 }
