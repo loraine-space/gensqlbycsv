@@ -1,6 +1,7 @@
 package cn.rofs.excel;
 
 
+import cn.rofs.excel.dto.ResultDTO;
 import cn.rofs.excel.dto.ResultDataDTO;
 import cn.rofs.excel.enums.ModelTypeEnum;
 import cn.rofs.excel.sqlopt.OptService;
@@ -15,8 +16,8 @@ class GenSqlUtilsTest {
 
     @Test
     void defaultGenerate() {
-        ResultDataDTO resultDataDTO = GenSqlUtils.defaultGenerate("data-ins.csv");
-        System.out.println(resultDataDTO.getCode() + ": {" + resultDataDTO.getMessage() + "}");
+        ResultDTO resultDTO = GenSqlUtils.defaultGenerate("data-ins.csv");
+        System.out.println(resultDTO.getCode() + ": {" + resultDTO.getMessage() + "}");
     }
 
     @Test
