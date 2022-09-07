@@ -162,7 +162,67 @@ public class GenSqlUtils {
      * @return
      */
     public static ResultDTO generateBySqlTemplate(String sqlTemplate, String fileDirPath, String dataFileName) {
-        return ResultDTO.SUCCESS();
+        ResultDTO resultDTO = ResultDTO.SUCCESS();
+        if (StringUtils.isAnyEmpty(dataFileName, fileDirPath)) {
+            return ResultDTO.FAIL("There is a null value with `dataFileName` and `fileDirPath`.");
+        }
+        if (!checkDataFileNameIsCSV(dataFileName)) {
+            return ResultDTO.FAIL("`dataFileName` is non-compliant.");
+        }
+        // 生成文件路径、名称等信息
+        CommonDataDTO commonData = new CommonDataDTO();
+        genCommonData(dataFileName, fileDirPath, commonData);
+
+        File csvFile = new File(commonData.getDataFileDirPath() + File.separator + dataFileName);
+        if (!csvFile.exists()) {
+            return ResultDTO.FAIL("dataFile does not exist.");
+        }
+
+        BufferedReader br = null;
+        StringBuilder resultSql = new StringBuilder();
+        Map<String, Object> headerMap = new HashMap<>();
+        FileWriter fw = null;
+        resultSql.append("------START------").append(dataFileName).append("------START------\r\n");
+        try {
+            br = new BufferedReader(new FileReader(csvFile));
+            String curLine;
+            int lineCount = 0;
+            while ((curLine = br.readLine()) != null) {
+                String sql = sqlTemplate;
+                String[] items = curLine.split(",");
+                for (int i = 0; i < items.length; i++) {
+                    sql = sql.replace("$[" + i + "]", items[i]);
+                }
+                resultSql.append(sql).append("\r\n");
+            }
+            resultSql.append("------END------").append(dataFileName).append("------END------\r\n");
+            // 判断输出文件夹是否存在
+            FileUtils.mkdirs(commonData.getResultFileDirPath());
+            fw = new FileWriter(commonData.getResultFileDirPath() + File.separator + commonData.getResultFileName());
+            fw.write(resultSql.toString());
+            System.out.println("File: {" + commonData.getResultFileDirPath() + File.separator + commonData.getResultFileName() + "} 创建成功.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResultDTO.FAIL("Program exception: {" + e.toString() + "}");
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return ResultDTO.FAIL("Program exception: {" + e.getMessage() + "}");
+                }
+            }
+            if (fw != null) {
+                try {
+                    fw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return ResultDTO.FAIL("Program exception: {" + e.getMessage() + "}");
+                }
+            }
+        }
+        return resultDTO;
     }
 
     /**
