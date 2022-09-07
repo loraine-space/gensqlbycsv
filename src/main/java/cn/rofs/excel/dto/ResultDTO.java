@@ -43,4 +43,8 @@ public class ResultDTO {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public String getGenMsg() {
+        return "code: " + this.code + ", msg: " + this.message;
+    }
 }
