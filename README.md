@@ -11,20 +11,20 @@ This util is used for batch generate sql.
 
 ### Part1. Use sqlTemplate
 
-1. Build sqlTemplate
+##### Step1. Build sqlTemplate
 
 ```MySQL
 insert into `user_info` (`id`, `name`, `age`, `sex`) values ('$[0]', '$[1]', $[2], '$[3]')
 ```
 
-2. Build CSV files
+##### Step2. Build CSV files
 
 ```csv
 2022090901,sumin,17,woman
 2022090902,maue,18,woman
 ```
 
-3. Use func
+##### Step3. Use func
 
 ```Java
 class Test {
@@ -53,4 +53,4 @@ class Test {
 
 ## Finally
 
-If you have any usage questions, please contact me(<822466858@qq.com>).
+If you have any usage questions, please contact me([Maue's Email]<822466858@qq.com>).
