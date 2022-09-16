@@ -1,5 +1,5 @@
 
-![Version](https://img.shields.io/badge/Version-1.0.2-ff69b4)
+[![Version](https://img.shields.io/badge/Version-1.0.2-ff69b4)](https://github.com/maue-opensource/gensqlbycsv/releases)
 [![Java](https://img.shields.io/badge/Java-1.8%2B-green)](https://www.openlogic.com/openjdk-downloads)
 [![License](https://img.shields.io/badge/License-MIT-green)](https://opensource.org/licenses/MIT)
 
@@ -53,4 +53,4 @@ class Test {
 
 ## Finally
 
-If you have any usage questions, please contact me([Maue's Email]<822466858@qq.com>).
+If you have any usage questions, please contact me(<822466858@qq.com>).
