@@ -1,12 +1,14 @@
 package cn.rofs.excel;
 
 
+import cn.rofs.excel.constant.SysConstant;
 import cn.rofs.excel.dto.ResultDTO;
-import cn.rofs.excel.dto.ResultDataDTO;
 import cn.rofs.excel.enums.ModelTypeEnum;
 import cn.rofs.excel.sqlopt.OptService;
 import cn.rofs.excel.sqlopt.OptServiceBuilder;
 import org.junit.jupiter.api.Test;
+
+import static cn.rofs.excel.constant.SqlTemplateConstant.SQL_TEMPLATE_EMPTY_PARAM;
 
 /**
  * @author rainofsilence
@@ -31,8 +33,11 @@ class GenSqlUtilsTest {
         OptService optService = OptServiceBuilder.getOptService("no");
     }
 
+
     @Test
-    void generate() {
-        // GenSqlUtils.generate("", "", null);
+    void generateBySqlTemplate() {
+        // 通过sqlTemplate生成sql
+        ResultDTO result = GenSqlUtils.generateBySqlTemplate(SQL_TEMPLATE_EMPTY_PARAM, SysConstant.DEFAULT_FILE_DIR_PATH, "sql_template_empty_param_test.csv");
+        System.out.println(result.getGenMsg());
     }
 }
