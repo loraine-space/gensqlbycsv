@@ -186,14 +186,28 @@ public class GenSqlUtils {
         try {
             br = new BufferedReader(new FileReader(csvFile));
             String curLine;
+            // 行数
             int lineCount = 0;
+            // 需要替换换的参数数量
+            int paramCount = 0;
             while ((curLine = br.readLine()) != null) {
+                if (lineCount == 0) {
+                    paramCount = curLine.split(",").length;
+                    lineCount++;
+                    continue;
+                }
+
                 String sql = sqlTemplate;
                 String[] items = curLine.split(",");
                 for (int i = 0; i < items.length; i++) {
-                    sql = sql.replace("$[" + i + "]", items[i]);
+                    sql = sql.replace("$[" + i + "]", numberEmptyToNull(items[i], sql, i));
                 }
-                resultSql.append(sql).append("\r\n");
+                // 存在最后一行是空参数的情况
+                if (items.length < paramCount) {
+                    int index = paramCount - 1;
+                    sql = sql.replace("$[" + index + "]", numberEmptyToNull(null, sql, index));
+                }
+                resultSql.append(sql);
             }
             resultSql.append("------END------").append(dataFileName).append("------END------\r\n");
             // 判断输出文件夹是否存在
@@ -274,4 +288,18 @@ public class GenSqlUtils {
         target.setResultFileName(target.getDataFileNameWithoutSuffix() + "_result_" + DateUtils.getCurDatetime() + ".sql");
     }
 
+    /**
+     * 数值类型的空参数转换
+     *
+     * @param curParam
+     * @param sql
+     * @param index
+     * @return
+     */
+    private static String numberEmptyToNull(String curParam, String sql, int index) {
+        if (StringUtils.isEmpty(curParam) && !sql.contains("'$[" + index + "]'")) {
+            return "null";
+        }
+        return curParam == null ? "" : curParam;
+    }
 }
