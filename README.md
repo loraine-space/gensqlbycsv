@@ -55,5 +55,5 @@ class Test {
 
 ## Finally
 
-If you have any usage questions, please contact me([Maue's Email](mailto:822466858@qq.com)).
+If you have any usage questions, please contact me(<rainofsilence@foxmail.com>).
 
