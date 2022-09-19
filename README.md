@@ -13,13 +13,14 @@ This util is used for batch generate sql.
 
 ##### Step1. Build sqlTemplate
 
-```MySQL
+```mysql
 insert into `user_info` (`id`, `name`, `age`, `sex`) values ('$[0]', '$[1]', $[2], '$[3]')
 ```
 
 ##### Step2. Build CSV files
 
 ```csv
+id,name,age,sex
 2022090901,sumin,17,woman
 2022090902,maue,18,woman
 ```
@@ -49,7 +50,8 @@ class Test {
 ### Part2. Download jar
 
 1. [1.0.2-release](https://github.com/maue-opensource/gensqlbycsv/releases/download/v1.0.2/gensqlbycsv-1.0.2.jar)
-2. [1.0.1-release](https://github.com/maue-opensource/gensqlbycsv/releases/download/v1.0.1/gensqlbycsv-1.0.1.jar)
+
+[//]: # (2. [1.0.1-release]&#40;https://github.com/maue-opensource/gensqlbycsv/releases/download/v1.0.1/gensqlbycsv-1.0.1.jar&#41;)
 
 ## Finally
 
