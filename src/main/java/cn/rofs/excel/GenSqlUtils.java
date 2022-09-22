@@ -7,6 +7,7 @@ import cn.rofs.excel.enums.ModelTypeEnum;
 import cn.rofs.excel.sqlopt.OptService;
 import cn.rofs.excel.sqlopt.OptServiceBuilder;
 import cn.rofs.excel.utils.DateUtils;
+import cn.rofs.excel.utils.EscapeCharUtils;
 import cn.rofs.excel.utils.FileUtils;
 import cn.rofs.excel.utils.LogUtils;
 import cn.rofs.excel.utils.common.StringUtils;
@@ -207,6 +208,8 @@ public class GenSqlUtils {
                     int index = paramCount - 1;
                     sql = sql.replace("$[" + index + "]", numberEmptyToNull(null, sql, index));
                 }
+                // 转义字符
+                sql = EscapeCharUtils.escape(sql);
                 resultSql.append(sql);
             }
             resultSql.append("------END------").append(dataFileName).append("------END------\r\n");
