@@ -81,6 +81,7 @@ public class GenSqlUtils {
         Map<String, Object> headerMap = new HashMap<>();
         BufferedReader br = null;
         StringBuilder resultSql = new StringBuilder();
+        Map<String, Object> headerMap = new HashMap<>();
         FileWriter fw = null;
         resultSql.append("------START------").append(dataFileName).append("------START------\r\n");
         try {
@@ -200,6 +201,8 @@ public class GenSqlUtils {
                     int index = paramCount - 1;
                     sql = sql.replace("$[" + index + "]", numberEmptyToNull(null, sql, index));
                 }
+                // 转义字符
+                sql = EscapeCharUtils.escape(sql);
                 resultSql.append(sql);
             }
             resultSql.append("------END------").append(dataFileName).append("------END------\r\n");
