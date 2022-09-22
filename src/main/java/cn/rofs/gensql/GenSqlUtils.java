@@ -7,6 +7,7 @@ import cn.rofs.gensql.enums.ModelTypeEnum;
 import cn.rofs.gensql.sqlopt.OptService;
 import cn.rofs.gensql.sqlopt.OptServiceBuilder;
 import cn.rofs.gensql.utils.DateUtils;
+import cn.rofs.gensql.utils.EscapeCharUtils;
 import cn.rofs.gensql.utils.FileUtils;
 import cn.rofs.gensql.utils.LogUtils;
 import cn.rofs.gensql.utils.common.StringUtils;
@@ -81,7 +82,6 @@ public class GenSqlUtils {
         Map<String, Object> headerMap = new HashMap<>();
         BufferedReader br = null;
         StringBuilder resultSql = new StringBuilder();
-        Map<String, Object> headerMap = new HashMap<>();
         FileWriter fw = null;
         resultSql.append("------START------").append(dataFileName).append("------START------\r\n");
         try {

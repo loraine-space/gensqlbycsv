@@ -1,4 +1,4 @@
-package cn.rofs.excel.utils;
+package cn.rofs.gensql.utils;
 
 /**
  * @author rainofsilence
