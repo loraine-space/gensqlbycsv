@@ -49,7 +49,7 @@ class Test {
 
 ### Part2. Download jar
 
-1. [1.0.2-RELEASE](https://github.com/maue-opensource/gensqlbycsv/releases/download/v1.0.2/gensqlbycsv-1.0.2.jar)
+1. [1.0.2-SNAPSHOT](https://github.com/maue-opensource/gensqlbycsv/releases/download/untagged-d2777fbe4ef156ae4d99/gensqlbycsv-1.0.2.jar)
 
 [//]: # (2. [1.0.1-release]&#40;https://github.com/maue-opensource/gensqlbycsv/releases/download/v1.0.1/gensqlbycsv-1.0.1.jar&#41;)
 
