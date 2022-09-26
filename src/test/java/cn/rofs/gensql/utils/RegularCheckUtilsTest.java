@@ -15,6 +15,6 @@ class RegularCheckUtilsTest {
     void matches() {
         // String str = "adas, 'aaa$[19]aaaa ' \r\n";
         String str = SqlTemplateConstant.SQL_TEMPLATE_EMPTY_PARAM;
-        System.out.println(RegularCheckUtils.matchesForSqlParamString(str, 4));
+        System.out.println(RegularCheckUtils.matchesForSqlParamString(str, 0));
     }
 }
