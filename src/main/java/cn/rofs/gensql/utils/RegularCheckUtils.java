@@ -12,11 +12,34 @@ public class RegularCheckUtils {
 
     // 字符类型的sql参数 , ' 字符 $[num] 字符 '
     // public static final String REGEX_SQL_PARAM_STRING = ".*,\\s*'\\S*\\$\\[num].*'.*";
-    public static final String REGEX_SQL_PARAM_STRING = "[\\s\\S]*,\\s*'\\S*\\$\\[num][\\s\\S]*'[\\s\\S]*";
-    public static final String REGEX_SQL_PARAM_STRING_INDEX_0 = "[\\s\\S]*'\\S*\\$\\[num][\\s\\S]*'[\\s\\S]*";
+    public static final String REGEX_SQL_PARAM_STRING = ".*,\\s*'\\S*\\$\\[num].*'.*";
+    public static final String REGEX_SQL_PARAM_STRING_INDEX_0 = ".*'\\S*\\$\\[num].*'.*";
 
+
+    /**
+     * @param regex 正则表达式
+     * @param input 待检验字符串输入
+     * @return boolean
+     */
     public static boolean matches(String regex, CharSequence input) {
-        Pattern p = Pattern.compile(regex);
+        return matches(regex, null, input);
+    }
+
+    /**
+     * @param regex 正则表达式
+     * @param flags 修饰符(标志)
+     * @param input 待检验字符串输入
+     * @return boolean
+     * @see Pattern#flags()
+     */
+    public static boolean matches(String regex, Integer flags, CharSequence input) {
+        Pattern p;
+        if (flags != null) {
+            p = Pattern.compile(regex, flags);
+        } else {
+            p = Pattern.compile(regex);
+        }
+
         Matcher m = p.matcher(input);
         return m.matches();
     }
@@ -27,6 +50,6 @@ public class RegularCheckUtils {
             regex = REGEX_SQL_PARAM_STRING_INDEX_0;
         }
         regex = regex.replace("num", String.valueOf(index));
-        return matches(regex, input);
+        return matches(regex, Pattern.DOTALL, input);
     }
 }
