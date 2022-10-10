@@ -205,6 +205,7 @@ public class GenSqlUtils {
                 // 转义字符
                 sql = EscapeCharUtils.escape(sql);
                 resultSql.append(sql);
+                lineCount++;
             }
             resultSql.append("------END------").append(dataFileName).append("------END------\r\n");
             // 判断输出文件夹是否存在
