@@ -7,9 +7,13 @@ package cn.rofs.gensql.utils;
 public class EscapeCharUtils {
 
     // ","
-    private static final String COMMA = "[C]";
+    public static final String COMMA = "[C]";
+
+    // " "
+    public static final String PLACEHOLDER_NULL = "[PH_NULL]";
 
     public static String escape(String sql) {
-        return sql.replace(COMMA, ",");
+        return sql.replace(COMMA, ",")
+                .replace(PLACEHOLDER_NULL, "");
     }
 }
