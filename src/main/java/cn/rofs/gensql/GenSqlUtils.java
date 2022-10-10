@@ -183,12 +183,17 @@ public class GenSqlUtils {
             // 行数
             int lineCount = 0;
             // 需要替换换的参数数量
-            int paramCount = 0;
+            // int paramCount = 0;
             while ((curLine = br.readLine()) != null) {
                 if (lineCount == 0) {
-                    paramCount = curLine.split(",").length;
+                    // paramCount = curLine.split(",").length;
                     lineCount++;
                     continue;
+                }
+
+                // 如果逗号结尾 需要占位符 不然split会出错
+                if (curLine.endsWith(",")) {
+                    curLine += EscapeCharUtils.PLACEHOLDER_NULL;
                 }
 
                 String sql = sqlTemplate;
@@ -196,11 +201,7 @@ public class GenSqlUtils {
                 for (int i = 0; i < items.length; i++) {
                     sql = sql.replace("$[" + i + "]", numberEmptyToNull(items[i], sql, i));
                 }
-                // 存在最后一行是空参数的情况
-                if (items.length < paramCount) {
-                    int index = paramCount - 1;
-                    sql = sql.replace("$[" + index + "]", numberEmptyToNull(null, sql, index));
-                }
+
                 // 转义字符
                 sql = EscapeCharUtils.escape(sql);
                 resultSql.append(sql);
